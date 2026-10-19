@@ -1029,8 +1029,7 @@ a { color: inherit; }
       '<p class="qr-cap" style="justify-self:center">Opens ABA Mobile and copies ' + amt + '. If ABA does not fill in the amount, paste it, or scan the QR below.</p>';
     var fig = '<figure class="qr-card"><div class="qr-frame"><button type="button" class="qr-btn" data-act="qr" aria-label="' + (isMobile ? 'Open ABA Mobile to pay ' : 'Copy account details to pay ') + amt + '">' +
       '<img class="qr" src="' + esc(qr) + '" alt="Payment QR code for ' + esc(SHOP.name) + ', ' + amt + '"></button></div>' +
-      '<figcaption class="qr-cap">' + (live ? '<span class="qr-chip">' + ICO.shield + 'KHQR for ' + amt + '</span><br>Valid for ' + SHOP.qrMinutes + ' minutes. ' : 'Enter ' + amt + ' when you pay. ') +
-      'Scan with your banking app. On the same phone, save the QR image and select it from your gallery in the banking app. Check the recipient and USD amount before approving.</figcaption></figure>';
+      '<figcaption class="qr-cap">' + (live ? '<span class="qr-chip">' + ICO.shield + 'KHQR for ' + amt + '</span>' : 'Enter ' + amt + ' when you pay.') + '</figcaption></figure>';
     var actions = '<div class="pay-actions">' +
       '<button class="btn btn-copy" type="button" data-act="copy-account">' + '<span class="lbl">' + ICO.copy + 'Copy account</span><span class="lbl-done">' + ICO.check + 'Copied</span></button>' +
       '<button class="btn btn-copy" type="button" data-act="copy-amount">' + '<span class="lbl">' + ICO.copy + 'Copy amount</span><span class="lbl-done">' + ICO.check + 'Copied</span></button></div>';
