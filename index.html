@@ -546,9 +546,15 @@ a { color: inherit; }
       <div class="field"><label for="f-name">Your name</label><input id="f-name" name="name" type="text" autocomplete="name"></div>
       <div class="field"><label for="f-phone">Phone number</label><input id="f-phone" name="phone" type="tel" autocomplete="tel"></div>
       <div class="field"><label for="f-address">Delivery address</label><textarea id="f-address" name="address" rows="2" autocomplete="street-address"></textarea></div>
+      <div class="field">
+        <p><strong>Confirm stock before paying / បញ្ជាក់ស្តុកមុនបង់ប្រាក់</strong></p>
+        <p>Ask us on Telegram to confirm your bottles, sizes, delivery area and delivery time. Your cart stays here while you chat.</p>
+        <a class="btn btn-ghost" id="check-stock" target="_blank" rel="noopener">Check stock on Telegram</a>
+        <label><input type="checkbox" id="stock-confirmed"> Vin Perfume has confirmed my selected items and delivery. / ហាងបានបញ្ជាក់ផលិតផល និងការដឹកជញ្ជូនរបស់ខ្ញុំហើយ។</label>
+      </div>
       <p class="error" id="form-error" role="alert"></p>
       <button class="btn btn-block" type="submit" id="to-payment">Proceed to payment</button>
-      <p class="note">Next you scan a QR code to pay and upload your receipt.</p>
+      <p class="note">After stock confirmation, pay by QR and upload your receipt. Payment is checked manually before shipping.</p>
     </form>
   </div>
 </aside>
@@ -1019,6 +1025,10 @@ a { color: inherit; }
       ["f-address", "Add your delivery address so we know where to send it."]
     ];
     if (!cart.length) return;
+    if (!$("stock-confirmed").checked) {
+      err.textContent = "Please confirm stock and delivery with us on Telegram before paying. / សូមបញ្ជាក់ស្តុក និងការដឹកជញ្ជូនជាមួយហាងតាម Telegram មុនបង់ប្រាក់។";
+      $("stock-confirmed").focus(); return;
+    }
     for (var k = 0; k < fields.length; k++) {
       var el = $(fields[k][0]);
       if (!el.value.trim()) { err.textContent = fields[k][1]; el.focus(); return; }
@@ -1153,12 +1163,15 @@ a { color: inherit; }
     var fig = '<figure class="qr-card"><div class="qr-frame"><button type="button" class="qr-btn" data-act="qr" aria-label="' + (isMobile ? 'Open ABA Mobile to pay ' : 'Copy account details to pay ') + amt + '">' +
       '<img class="qr" src="' + esc(qr) + '" alt="Payment QR code for ' + esc(SHOP.name) + ', ' + amt + '"></button></div>' +
       '<figcaption class="qr-cap">' + (live ? '<span class="qr-chip">' + ICO.shield + 'KHQR for ' + amt + '</span><br>Valid for ' + SHOP.qrMinutes + ' minutes. ' : 'Enter ' + amt + ' when you pay. ') +
-      (isMobile ? 'Or press and hold the QR to save it, then scan it from your gallery in ABA Mobile.' : 'Open ABA Mobile and scan it.') + '</figcaption></figure>';
+      'Scan with your banking app. On the same phone, save the QR image and select it from your gallery in the banking app. Check the recipient and USD amount before approving. / ពិនិត្យឈ្មោះអ្នកទទួល និងទឹកប្រាក់មុនបង់ប្រាក់។</figcaption></figure>';
     var actions = '<div class="pay-actions">' +
       '<button class="btn btn-copy" type="button" data-act="copy-account">' + '<span class="lbl">' + ICO.copy + 'Copy account</span><span class="lbl-done">' + ICO.check + 'Copied</span></button>' +
       '<button class="btn btn-copy" type="button" data-act="copy-amount">' + '<span class="lbl">' + ICO.copy + 'Copy amount</span><span class="lbl-done">' + ICO.check + 'Copied</span></button></div>';
     // On a computer the ABA app link is blocked by the browser, so only the QR and copy buttons are shown.
-    return isMobile ? btn + fig + actions : fig + actions;
+    var account = acct();
+    var details = '<p class="note">ABA Bank — ' + esc(account.name) + '<br>Account: ' + esc(account.number) + '<br>Amount: ' + amt + ' USD</p>';
+    var download = '<a class="btn btn-ghost btn-block" href="' + esc(qr) + '" download="vin-perfume-payment-qr.png">Save payment QR / រក្សាទុក QR</a>';
+    return (isMobile ? btn : '') + fig + download + details + actions;
   }
 
   function copyAccount(btn) {
@@ -1181,7 +1194,7 @@ a { color: inherit; }
     if (flow.step === "done") {
       $("cart-title").textContent = "Thank you";
       body.innerHTML = '<div class="placed">' +
-        '<h3 class="done-title">Thank you for your order!</h3>' +
+        '<h3 class="done-title">Order submitted — payment awaiting review</h3>' +
         '<p>' + (flow.via === "telegram"
           ? 'Send the Telegram message and your receipt, and we will confirm your payment and contact you shortly.'
           : 'We received your order and payment receipt. We will confirm your payment and contact you shortly.') + '</p>' +
@@ -1216,14 +1229,21 @@ a { color: inherit; }
       '<p class="step-h"><span class="step-n">2</span>Upload your receipt</p>' +
       '<p class="line-sub" style="margin-top:-0.6rem">Scan to pay, then upload your transaction receipt/slip below.</p>' +
       receiptHTML +
+      '<p class="note">Prefer Telegram? <a href="' + esc(telegramLink(o)) + '" target="_blank" rel="noopener">Open your order message</a>, then send it and attach your receipt in the chat. Opening the link does not submit the order. / អ្នកក៏អាចផ្ញើការបញ្ជាទិញ និងបង្កាន់ដៃតាម Telegram បាន។</p>' +
       '<p class="error" role="alert">' + esc(flow.error) + '</p>' +
       fallbackHTML +
       '<div class="pay-cta"><button class="btn btn-block btn-confirm" type="button" data-act="confirm"' + (flow.sending ? ' disabled aria-busy="true"' : '') + '>' +
-        (flow.sending ? 'Sending your order...' : ICO.lock + 'Confirm order &amp; pay') + '</button>' +
-      '<p class="note">We check your payment before we ship.</p></div></div>';
+        (flow.sending ? 'Sending your order...' : ICO.lock + 'Submit order and receipt / បញ្ជូនការបញ្ជាទិញ និងបង្កាន់ដៃ') + '</button>' +
+      '<p class="note">This button sends your order and receipt; it does not charge your account. We verify the payment before shipping. Need help? <a href="https://t.me/V_PERFUME1" target="_blank" rel="noopener">Contact us on Telegram</a>.</p></div></div>';
   }
 
   function renderCart(focusSel) {
+    $("check-stock").href = "https://t.me/" + SHOP.telegram + "?text=" + encodeURIComponent("Please confirm stock, delivery area and delivery time before I pay:\n" + cart.map(function (i) { return i.qty + " x " + lineName(i) + ", " + i.size + " ml"; }).join("\n"));
+    var stockKey = JSON.stringify(cart);
+    if ($("stock-confirmed").dataset.cart !== stockKey) {
+      $("stock-confirmed").checked = false;
+      $("stock-confirmed").dataset.cart = stockKey;
+    }
     var count = cart.reduce(function (s, i) { return s + i.qty; }, 0);
     $("cart-count").textContent = count;
     $("cart-btn").setAttribute("aria-label", "Open cart, " + count + (count === 1 ? " item" : " items"));
