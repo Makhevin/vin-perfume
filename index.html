@@ -407,6 +407,19 @@ a { color: inherit; }
   .section { padding-block: 3rem; }
 }
 @media (max-width: 640px) {
+  .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem 0.5rem; }
+  .item { gap: 0.5rem; }
+  .item .tile { border-radius: 14px; padding: 0.3rem; }
+  .item-body { width: 100%; min-width: 0; }
+  .item h3 { font-size: 0.9rem; line-height: 1.2; overflow-wrap: anywhere; }
+  .item .fam, .item .notes { font-size: 0.65rem; overflow-wrap: anywhere; }
+  .item .seg { display: flex; flex-wrap: wrap; width: 100%; border-radius: 10px; }
+  .item .seg-sm button { flex: 1 1 auto; min-width: 0; padding: 0.35rem 0.2rem; font-size: 0.65rem; }
+  .item-buy { flex-direction: column; align-items: stretch; gap: 0.5rem; margin-top: 0.3rem; }
+  .item-buy .price { font-size: 1rem; }
+  .item-buy .btn { width: 100%; padding: 0.65rem 0.2rem; font-size: 0.65rem; white-space: normal; }
+  .item .stock-note { font-size: 0.65rem; margin: 0.4rem 0; }
+  .item .sale-badge { font-size: 0.6rem; }
   .nav { display: none; }
   .chips { flex-wrap: nowrap; overflow-x: auto; margin-inline: -16px; padding: 0 16px 0.4rem; scrollbar-width: none; }
   .chips::-webkit-scrollbar { display: none; }
