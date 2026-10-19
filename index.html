@@ -425,9 +425,8 @@ a { color: inherit; }
   <div class="welcome-copy">
    <p class="welcome-eyebrow">Welcome to Vin Perfume</p>
    <h2 id="welcome-title">A scent.<br>A memory.<br><em>Uniquely you.</em></h2>
-   <p class="welcome-kh" lang="km">ស្វាគមន៍មកកាន់ Vin Perfume</p>
    <p class="welcome-description">Discover designer and Arabian fragrances. Find the scent that feels like you, from everyday favourites to special occasions.</p>
-   <button class="welcome-shop" type="button" data-welcome-close>Explore perfumes · មើលទឹកអប់ →</button>
+   <button class="welcome-shop" type="button" data-welcome-close>Explore perfumes →</button>
    <a class="welcome-help" href="https://t.me/V_PERFUME1" target="_blank" rel="noopener">Need a recommendation? Chat with us ↗</a>
    <div class="welcome-benefits"><span>✦ ABA QR payment</span><span>✦ $2 delivery</span><span>✦ Personal advice</span></div>
   </div>
@@ -435,7 +434,7 @@ a { color: inherit; }
  </div>
 </dialog>
 <div id="page">
-<p class="store-ribbon">DESIGNER & ARABIAN FRAGRANCES · DELIVERY $2 · ស្វាគមន៍មកកាន់ VIN PERFUME</p>
+<p class="store-ribbon">DESIGNER & ARABIAN FRAGRANCES · DELIVERY $2 · FIND YOUR SIGNATURE SCENT</p>
   <header class="bar">
     <div class="wrap bar-in">
       <a class="mark" href="#top" aria-label="Vin Perfume home"><span class="brand-seal" aria-hidden="true">V.</span><span>VIN PERFUME<small>YOUR EVERYDAY SIGNATURE</small></span></a>
@@ -564,10 +563,10 @@ a { color: inherit; }
       <div class="field"><label for="f-phone">Phone number</label><input id="f-phone" name="phone" type="tel" autocomplete="tel"></div>
       <div class="field"><label for="f-address">Delivery address</label><textarea id="f-address" name="address" rows="2" autocomplete="street-address"></textarea></div>
       <div class="field">
-        <p><strong>Confirm stock before paying / បញ្ជាក់ស្តុកមុនបង់ប្រាក់</strong></p>
+        <p><strong>Confirm stock before paying</strong></p>
         <p>Ask us on Telegram to confirm your bottles, sizes, delivery area and delivery time. Your cart stays here while you chat.</p>
         <a class="btn btn-ghost" id="check-stock" target="_blank" rel="noopener">Check stock on Telegram</a>
-        <label><input type="checkbox" id="stock-confirmed"> Vin Perfume has confirmed my selected items and delivery. / ហាងបានបញ្ជាក់ផលិតផល និងការដឹកជញ្ជូនរបស់ខ្ញុំហើយ។</label>
+        <label><input type="checkbox" id="stock-confirmed"> Vin Perfume has confirmed my selected items and delivery.</label>
       </div>
       <p class="error" id="form-error" role="alert"></p>
       <button class="btn btn-block" type="submit" id="to-payment">Proceed to payment</button>
@@ -1043,7 +1042,7 @@ a { color: inherit; }
     ];
     if (!cart.length) return;
     if (!$("stock-confirmed").checked) {
-      err.textContent = "Please confirm stock and delivery with us on Telegram before paying. / សូមបញ្ជាក់ស្តុក និងការដឹកជញ្ជូនជាមួយហាងតាម Telegram មុនបង់ប្រាក់។";
+      err.textContent = "Please confirm stock and delivery with us on Telegram before paying.";
       $("stock-confirmed").focus(); return;
     }
     for (var k = 0; k < fields.length; k++) {
@@ -1180,14 +1179,14 @@ a { color: inherit; }
     var fig = '<figure class="qr-card"><div class="qr-frame"><button type="button" class="qr-btn" data-act="qr" aria-label="' + (isMobile ? 'Open ABA Mobile to pay ' : 'Copy account details to pay ') + amt + '">' +
       '<img class="qr" src="' + esc(qr) + '" alt="Payment QR code for ' + esc(SHOP.name) + ', ' + amt + '"></button></div>' +
       '<figcaption class="qr-cap">' + (live ? '<span class="qr-chip">' + ICO.shield + 'KHQR for ' + amt + '</span><br>Valid for ' + SHOP.qrMinutes + ' minutes. ' : 'Enter ' + amt + ' when you pay. ') +
-      'Scan with your banking app. On the same phone, save the QR image and select it from your gallery in the banking app. Check the recipient and USD amount before approving. / ពិនិត្យឈ្មោះអ្នកទទួល និងទឹកប្រាក់មុនបង់ប្រាក់។</figcaption></figure>';
+      'Scan with your banking app. On the same phone, save the QR image and select it from your gallery in the banking app. Check the recipient and USD amount before approving.</figcaption></figure>';
     var actions = '<div class="pay-actions">' +
       '<button class="btn btn-copy" type="button" data-act="copy-account">' + '<span class="lbl">' + ICO.copy + 'Copy account</span><span class="lbl-done">' + ICO.check + 'Copied</span></button>' +
       '<button class="btn btn-copy" type="button" data-act="copy-amount">' + '<span class="lbl">' + ICO.copy + 'Copy amount</span><span class="lbl-done">' + ICO.check + 'Copied</span></button></div>';
     // On a computer the ABA app link is blocked by the browser, so only the QR and copy buttons are shown.
     var account = acct();
     var details = '<p class="note">ABA Bank — ' + esc(account.name) + '<br>Account: ' + esc(account.number) + '<br>Amount: ' + amt + ' USD</p>';
-    var download = '<a class="btn btn-ghost btn-block" href="' + esc(qr) + '" download="vin-perfume-payment-qr.png">Save payment QR / រក្សាទុក QR</a>';
+    var download = '<a class="btn btn-ghost btn-block" href="' + esc(qr) + '" download="vin-perfume-payment-qr.png">Save payment QR</a>';
     return (isMobile ? btn : '') + fig + download + details + actions;
   }
 
@@ -1246,11 +1245,11 @@ a { color: inherit; }
       '<p class="step-h"><span class="step-n">2</span>Upload your receipt</p>' +
       '<p class="line-sub" style="margin-top:-0.6rem">Scan to pay, then upload your transaction receipt/slip below.</p>' +
       receiptHTML +
-      '<p class="note">Prefer Telegram? <a href="' + esc(telegramLink(o)) + '" target="_blank" rel="noopener">Open your order message</a>, then send it and attach your receipt in the chat. Opening the link does not submit the order. / អ្នកក៏អាចផ្ញើការបញ្ជាទិញ និងបង្កាន់ដៃតាម Telegram បាន។</p>' +
+      '<p class="note">Prefer Telegram? <a href="' + esc(telegramLink(o)) + '" target="_blank" rel="noopener">Open your order message</a>, then send it and attach your receipt in the chat. Opening the link does not submit the order.</p>' +
       '<p class="error" role="alert">' + esc(flow.error) + '</p>' +
       fallbackHTML +
       '<div class="pay-cta"><button class="btn btn-block btn-confirm" type="button" data-act="confirm"' + (flow.sending ? ' disabled aria-busy="true"' : '') + '>' +
-        (flow.sending ? 'Sending your order...' : ICO.lock + 'Submit order and receipt / បញ្ជូនការបញ្ជាទិញ និងបង្កាន់ដៃ') + '</button>' +
+        (flow.sending ? 'Sending your order...' : ICO.lock + 'Submit order and receipt') + '</button>' +
       '<p class="note">This button sends your order and receipt; it does not charge your account. We verify the payment before shipping. Need help? <a href="https://t.me/V_PERFUME1" target="_blank" rel="noopener">Contact us on Telegram</a>.</p></div></div>';
   }
 
@@ -1383,7 +1382,7 @@ a { color: inherit; }
     if (act === "back") { flow.step = "cart"; flow.error = ""; flow.fallback = false; renderCart(); return; }
     if (act === "confirm") { confirmOrder(); return; }
     if (act === "qr") { if (isMobile && flow.khqr) { window.open(abaDeepLink(flow.khqr), "_blank", "noopener"); } else { copyAccount(); } return; }
-    if (act === "aba") { copyText(Number(flow.order.total).toFixed(2), "បាន Copy ចំនួនលុយ $" + Number(flow.order.total).toFixed(2) + " រួចរាល់! សូម Paste ចូលក្នុង App ABA ប្រសិនបើ ABA មិនឡើងចំនួនលុយស្វ័យប្រវត្តិ។ (Amount copied. Paste it in ABA if it is not filled in.)"); return; }
+    if (act === "aba") { copyText(Number(flow.order.total).toFixed(2), "Amount copied. Paste it in ABA if it is not filled in."); return; }
     if (act === "copy-account") { copyAccount(t); return; }
     if (act === "copy-amount") { copyText(Number(flow.order.total).toFixed(2), "Amount copied", t); return; }
     if (act === "pick") { var inp = $("receipt"); if (inp) inp.click(); return; }
