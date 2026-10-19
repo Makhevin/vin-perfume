@@ -13,7 +13,7 @@ function run({ confirmed = true, name = 'Test Customer', phone = '012345678', ad
   nodes['form-error'] = { textContent: '' };
   nodes['stock-confirmed'] = { checked: confirmed, focus() {} };
   nodes['cart-body'] = { querySelector() { return { focus() {} }; } };
-  const context = { $: id => nodes[id], cart: [{}], flow: {}, buildOrder: () => ({ total: 107 }), khqrFor: amount => 'qr:' + amount, qrPng: qr => qr, renderCart() {} };
+  const context = { $: id => nodes[id], cart: [{id:'test',size:100,qty:1}], byId:{test:{}}, stockOf:()=>5, flow: {}, buildOrder: () => ({ total: 107 }), khqrFor: amount => 'qr:' + amount, qrPng: qr => qr, renderCart() {} };
   vm.runInNewContext(html.slice(start, end) + '\ngoToPayment();', context);
   return { error: nodes['form-error'].textContent, flow: context.flow };
 }
@@ -26,6 +26,7 @@ const valid = run();
 assert.equal(valid.error, '');
 assert.equal(valid.flow.step, 'pay');
 assert.equal(valid.flow.khqr, 'qr:107');
-const missing = [...new Set(html.match(/img\/[A-Za-z0-9_.-]+/g))].filter(p => !fs.existsSync(p));
+const imageSources = html + (fs.existsSync('catalog.js') ? fs.readFileSync('catalog.js','utf8') : '');
+const missing = [...new Set(imageSources.match(/img\/[A-Za-z0-9_.-]+/g))].filter(p => !fs.existsSync(p));
 assert.deepEqual(missing, []);
 console.log('Passed: script syntax, stock gate, required fields, phone validation, payment transition, and image paths.');

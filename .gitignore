@@ -5,3 +5,9 @@ node_modules/
 .DS_Store
 Thumbs.db
 *.log
+cloudflare-upload/
+live-check.html
+live-welcome.css
+live-welcome.js
+vin-perfume-updated.zip
+vin-perfume-updated/

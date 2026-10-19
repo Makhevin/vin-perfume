@@ -576,9 +576,11 @@ a { color: inherit; }
 </aside>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<script src="catalog.js"></script>
+<script src="catalog-rules.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <script>
-(function () {
+(async function () {
   "use strict";
 
   // Edit these to match your shop.
@@ -597,177 +599,14 @@ a { color: inherit; }
   var SCALE = [0.88, 1, 1.1]; // bottle scale for the smallest, middle and largest size
 
   // Prices are examples. Replace them with your own. Keys in "prices" are bottle sizes in ml.
-  var P = [
-    { id: "sauvage", brand: "Dior", name: "Sauvage", title: "Dior Sauvage", conc: "Eau de parfum", who: "Him", shape: "woody", juice: "#4F7FC0",
-      img: "img/sauvage.jpg", prices: { 60: 105, 100: 140, 200: 190 }, def: 100, notes: "Bergamot, lavender, vanilla",
-      line: "Fresh bergamot over a warm, spicy vanilla base." },
-    { id: "jadore", brand: "Dior", name: "J'adore", title: "Dior J'adore", conc: "Eau de parfum", who: "Her", shape: "floral", juice: "#E4C568",
-      img: "img/jadore.jpg", prices: { 30: 85, 50: 115, 100: 155 }, def: 50, notes: "Ylang-ylang, rose, jasmine",
-      line: "A bouquet of ylang-ylang, rose and jasmine." },
-    { id: "libre", brand: "YSL", name: "Libre", title: "YSL Libre", conc: "Eau de parfum", who: "Her", shape: "warm", juice: "#E5A03A",
-      img: "img/libre.jpg", prices: { 30: 80, 50: 110, 90: 150 }, def: 50, notes: "Lavender, orange blossom, vanilla",
-      line: "Lavender and orange blossom on vanilla." },
-    { id: "y", brand: "YSL", name: "Y", title: "YSL Y", conc: "Eau de parfum", who: "Him", shape: "fresh", juice: "#5AA6D6",
-      img: "img/y.jpg", prices: { 40: 85, 60: 115, 100: 150 }, def: 60, notes: "Bergamot, ginger, cedar",
-      line: "Fresh bergamot and ginger over woods." },
-    { id: "black-opium", brand: "YSL", name: "Black Opium", title: "YSL Black Opium", conc: "Eau de parfum", who: "Her", shape: "floral", juice: "#5B3B30",
-      img: "img/black-opium.jpg", prices: { 30: 78, 50: 105, 90: 145 }, def: 50, notes: "Coffee, white flowers, vanilla",
-      line: "Dark coffee and white flowers on vanilla." },
-    { id: "coach-floral", brand: "Coach", name: "Floral", title: "Coach Floral", conc: "Eau de parfum", who: "Her", shape: "warm", juice: "#EDB3BF",
-      img: "img/coach-floral.jpg", prices: { 30: 55, 50: 75, 90: 100 }, def: 50, notes: "Tea rose, jasmine, vanilla",
-      line: "Tea rose and jasmine on vanilla and musk." },
-    { id: "coach-open-road", brand: "Coach", name: "Open Road", title: "Coach Open Road", conc: "Eau de toilette", who: "Him", shape: "woody", juice: "#8FB3D9",
-      img: "img/coach-open-road.jpg", prices: { 40: 50, 60: 65, 100: 85 }, def: 60, notes: "Lemon, lavender, vetiver",
-      line: "Lemon and red apple over lavender and vetiver." },
-    { id: "bleu", brand: "Chanel", name: "Bleu de Chanel", title: "Bleu de Chanel", conc: "Eau de parfum", who: "Him", shape: "fresh", juice: "#2A47A8",
-      img: "img/bleu.jpg", prices: { 50: 120, 100: 165, 150: 205 }, def: 100, notes: "Citrus, incense, cedar, sandalwood",
-      line: "Citrus and incense over cedar and sandalwood." },
-    { id: "her", brand: "Burberry", name: "Her", title: "Burberry Her", conc: "Eau de parfum", who: "Her", shape: "floral", juice: "#F2B5C4",
-      img: "img/her.jpg", prices: { 30: 78, 50: 105, 100: 140 }, def: 50, notes: "Blackcurrant, jasmine, violet, musk",
-      line: "Dark berries over jasmine and musk." },
-    { id: "her-elixir", brand: "Burberry", name: "Her Elixir", title: "Burberry Her Elixir", conc: "Eau de parfum", who: "Her", shape: "floral", juice: "#E8A9B5",
-      img: "img/her-elixir.jpg", prices: { 30: 92, 50: 125 }, def: 50, notes: "Strawberry, jasmine, vanilla, sandalwood",
-      line: "Strawberry and blackberry over vanilla and sandalwood." },
-    { id: "her-petals", brand: "Burberry", name: "Her Petals", title: "Burberry Her Petals", conc: "Eau de parfum", who: "Her", shape: "floral", juice: "#EBCFC4",
-      img: "img/her-petals.jpg", prices: { 88: 135 }, def: 88, notes: "Crushed berries, violet, jasmine, amber",
-      line: "Crushed berries and violet in a bottle full of petals." },
-    { id: "y-le-parfum", brand: "YSL", name: "Y Le Parfum", title: "YSL Y Le Parfum", conc: "Eau de parfum", who: "Him", shape: "fresh", juice: "#2B2F3A",
-      img: "img/y-le-parfum.jpg", prices: { 60: 125, 100: 160, 200: 215 }, def: 100, notes: "Grapefruit, lavender, cedarwood, tonka bean",
-      line: "Grapefruit and ginger over lavender, cedar and tonka bean." },
-    { id: "myslf", brand: "YSL", name: "MYSLF", title: "YSL MYSLF", conc: "Eau de parfum", who: "Him", shape: "woody", juice: "#23262E",
-      img: "img/myslf.jpg", prices: { 40: 100, 60: 125, 100: 160 }, def: 60, notes: "Bergamot, orange blossom, woods",
-      line: "Bergamot and orange blossom over woods." },
-    { id: "sauvage-edt", brand: "Dior", name: "Sauvage Eau de Toilette", title: "Dior Sauvage Eau de Toilette", conc: "Eau de toilette", who: "Him", shape: "woody", juice: "#274A8A",
-      img: "img/sauvage-edt.jpg", prices: { 60: 95, 100: 125, 200: 170 }, def: 100, notes: "Bergamot, pepper, ambroxan",
-      line: "Sharp bergamot and pepper over ambroxan." },
-    { id: "le-male-le-parfum", brand: "Jean Paul Gaultier", name: "Le Male Le Parfum", title: "Jean Paul Gaultier Le Male Le Parfum", conc: "Eau de parfum", who: "Him", shape: "warm", juice: "#1E1E22",
-      img: "img/le-male.jpg", prices: { 75: 100, 125: 135, 200: 175 }, def: 125, notes: "Cardamom, lavender, iris, vanilla",
-      line: "Cardamom and lavender over iris and vanilla." },
-    { id: "le-male-elixir", brand: "Jean Paul Gaultier", name: "Le Male Elixir", title: "Jean Paul Gaultier Le Male Elixir", conc: "Parfum", who: "Him", shape: "warm", juice: "#B8893A",
-      img: "img/le-male-elixir.jpg", prices: { 75: 115, 125: 150 }, def: 125, notes: "Lavender, honey, tonka bean, benzoin",
-      line: "Lavender and honey over tonka bean and warm woods." },
-    { id: "gaultier-divine", brand: "Jean Paul Gaultier", name: "Gaultier Divine", title: "Jean Paul Gaultier Gaultier Divine", conc: "Eau de parfum", who: "Her", shape: "floral", juice: "#E2B755",
-      img: "img/gaultier-divine.jpg", prices: { 30: 90, 50: 120, 100: 160 }, def: 50, notes: "Salt, lily, meringue",
-      line: "Salt and lily over a sweet meringue base." },
-    { id: "le-beau-le-parfum", brand: "Jean Paul Gaultier", name: "Le Beau Le Parfum", title: "Jean Paul Gaultier Le Beau Le Parfum", conc: "Eau de parfum", who: "Him", shape: "warm", juice: "#1F6E73",
-      img: "img/le-beau.jpg", prices: { 40: 95, 75: 120, 125: 150 }, def: 75, notes: "Tropical notes, amber, woods",
-      line: "Tropical notes over rich amber." },
-    { id: "explorer", brand: "Montblanc", name: "Explorer", title: "Montblanc Explorer", conc: "Eau de parfum", who: "Him", shape: "woody", juice: "#2B2F36",
-      img: "img/explorer.jpg", prices: { 60: 65, 100: 85 }, def: 100, notes: "Bergamot, vetiver, leather, patchouli",
-      line: "Bergamot and sage over vetiver, leather and patchouli." },
-    { id: "swy-intensely", brand: "Emporio Armani", name: "Stronger With You Intensely", title: "Emporio Armani Stronger With You Intensely", conc: "Eau de parfum", who: "Him", shape: "warm", juice: "#C9712E",
-      img: "img/swy-intensely.jpg", prices: { 50: 85, 100: 115, 150: 140 }, def: 100, notes: "Pink pepper, toffee, cinnamon, vanilla",
-      line: "Juniper and pink pepper over toffee, cinnamon and vanilla." },
-    { id: "swy-absolutely", brand: "Emporio Armani", name: "Stronger With You Absolutely", title: "Emporio Armani Stronger With You Absolutely", conc: "Eau de parfum", who: "Him", shape: "warm", juice: "#C8501F",
-      img: "img/swy-absolutely.jpg", prices: { 50: 110, 100: 140 }, def: 100, notes: "Warm, sweet, woody",
-      line: "A deep, warm and sweet scent with a woody finish." },
-    { id: "bleu-parfum", brand: "Chanel", name: "Bleu de Chanel Parfum", title: "Bleu de Chanel Parfum", conc: "Parfum", who: "Him", shape: "fresh", juice: "#2D3E5C",
-      img: "img/bleu-parfum.jpg", prices: { 50: 140, 100: 185, 150: 230 }, def: 100, notes: "Fresh citrus, sandalwood",
-      line: "Powerful freshness over New Caledonian sandalwood." },
-    { id: "montblanc-signature", brand: "Montblanc", name: "Signature", title: "Montblanc Signature", conc: "Eau de parfum", who: "Her", shape: "floral", juice: "#E9E4DA",
-      img: "img/montblanc-signature.jpg", prices: { 30: 50, 50: 70, 90: 95 }, def: 50, notes: "Oriental vanilla, white musk",
-      line: "Oriental vanilla set against white musk." },
-    { id: "eros-energy", brand: "Versace", name: "Eros Energy", title: "Versace Eros Energy", conc: "Eau de parfum", who: "Him", shape: "woody", juice: "#E3B91E",
-      img: "img/eros-energy.jpg", prices: { 50: 85, 100: 110, 200: 150 }, def: 100, notes: "Mint, green apple, ambroxan, vetiver",
-      line: "Mint and green apple over tonka bean, vanilla and vetiver." },
-    { id: "versace-pour-homme", brand: "Versace", name: "Pour Homme", title: "Versace Pour Homme", conc: "Eau de toilette", who: "Him", shape: "woody", juice: "#7FB0DC",
-      img: "img/versace-pour-homme.jpg", prices: { 50: 55, 100: 75, 200: 105 }, def: 100, notes: "Bergamot, neroli, hyacinth, cedarwood",
-      line: "Bergamot and neroli over blue hyacinth and cedarwood." },
-    { id: "eros-parfum", brand: "Versace", name: "Eros Parfum", title: "Versace Eros Parfum", conc: "Parfum", who: "Him", shape: "woody", juice: "#1F6F7A",
-      img: "img/eros-parfum.jpg", prices: { 50: 100, 100: 130, 200: 175 }, def: 100, notes: "Lemon, mint, sandalwood, vanilla",
-      line: "Italian lemon and mint over cedar, sandalwood and vanilla." },
-    { id: "born-in-roma-intense", brand: "Valentino", name: "Uomo Born in Roma Intense", title: "Valentino Uomo Born in Roma Intense", conc: "Eau de parfum", who: "Him", shape: "woody", juice: "#7A1F3D",
-      img: "img/born-in-roma.jpg", prices: { 50: 105, 100: 140 }, def: 100, notes: "Mandarin, ginger, lavandin, vanilla",
-      line: "Mandarin and ginger over nutmeg, vetiver and amber." },
-    { id: "adg-edp", brand: "Giorgio Armani", name: "Acqua di Giò", title: "Giorgio Armani Acqua di Giò Eau de Parfum", conc: "Eau de parfum", who: "Him", shape: "woody", juice: "#C9D6A0",
-      img: "img/adg-edp.jpg", prices: { 40: 85, 75: 110, 125: 140 }, def: 75, notes: "Green mandarin, clary sage, patchouli",
-      line: "Green mandarin and clary sage over patchouli." },
-    { id: "adg-edp-new", brand: "Giorgio Armani", name: "Acqua di Giò (new bottle)", title: "Giorgio Armani Acqua di Giò Eau de Parfum (new bottle)", conc: "Eau de parfum", who: "Him", shape: "woody", juice: "#9AA0A8",
-      img: "img/adg-edp-new.jpg", prices: { 40: 85, 75: 110, 125: 140 }, def: 75, notes: "Green mandarin, clary sage, patchouli",
-      line: "Green mandarin and clary sage over patchouli." },
-    { id: "adg-parfum", brand: "Giorgio Armani", name: "Acqua di Giò Parfum", title: "Giorgio Armani Acqua di Giò Parfum", conc: "Parfum", who: "Him", shape: "woody", juice: "#2A2A30",
-      img: "img/adg-parfum.jpg", prices: { 40: 100, 75: 130, 125: 165 }, def: 75, notes: "Bergamot, cardamom, lavender, patchouli",
-      line: "Bergamot and cardamom over lavender, patchouli and amber." },
-    { id: "adg-edt", brand: "Giorgio Armani", name: "Acqua di Giò Pour Homme", title: "Giorgio Armani Acqua di Giò Pour Homme", conc: "Eau de toilette", who: "Him", shape: "woody", juice: "#B9D0CF",
-      img: "img/adg-edt.jpg", prices: { 50: 70, 100: 90, 200: 125 }, def: 100, notes: "Marine notes, citrus, woods",
-      line: "Marine notes and citrus over woods." },
-    { id: "adg-profondo", brand: "Giorgio Armani", name: "Acqua di Giò Profondo", title: "Giorgio Armani Acqua di Giò Profondo", conc: "Eau de parfum", who: "Him", shape: "woody", juice: "#1E3F7A",
-      img: "img/adg-profondo.jpg", prices: { 75: 115, 100: 135, 125: 155 }, def: 100, notes: "Green mandarin, sea notes, lavender, patchouli",
-      line: "Green mandarin and sea notes over lavender and patchouli." },
-    { id: "ventana-marine", brand: "Armaf", name: "Ventana Marine", title: "Armaf Ventana Marine", conc: "Eau de parfum", who: "Him", shape: "fresh", juice: "#4FB3E0",
-      img: "img/ventana-marine.jpg", prices: { 100: 45 }, def: 100, notes: "Bergamot, neroli, cinnamon, sandalwood",
-      line: "Citrus and neroli over sandalwood and black tea." },
-    { id: "ventana", brand: "Armaf", name: "Ventana", title: "Armaf Ventana", conc: "Eau de parfum", who: "Him", shape: "warm", juice: "#3A3236",
-      img: "img/ventana.jpg", prices: { 100: 45 }, def: 100, notes: "Grapefruit, lavender, cedar, amber",
-      line: "Grapefruit and lemon over lavender, cedar and amber." },
-    { id: "club-de-nuit-urban-elixir", brand: "Armaf", name: "Club de Nuit Urban Man Elixir", title: "Armaf Club de Nuit Urban Man Elixir", conc: "Eau de parfum", who: "Him", shape: "woody", juice: "#2A2F3A",
-      img: "img/club-de-nuit-urban-elixir.jpg", prices: { 105: 50 }, def: 105, notes: "Pink pepper, bergamot, lavender, ambroxan",
-      line: "Pink pepper and bergamot over lavender, saffron and ambroxan." },
-    { id: "zenith-deep", brand: "French Avenue", name: "Zenith Deep", title: "French Avenue Zenith Deep", conc: "Eau de parfum", who: "Him", shape: "woody", juice: "#D9DEE6",
-      img: "img/zenith-deep.jpg", prices: { 100: 40 }, def: 100, notes: "Grapefruit, mint, nutmeg, sandalwood",
-      line: "Grapefruit and mint over nutmeg, incense and sandalwood." },
-    { id: "zenith-blue", brand: "French Avenue", name: "Zenith Blue", title: "French Avenue Zenith Blue", conc: "Eau de parfum", who: "Him", shape: "woody", juice: "#1F2A3A",
-      img: "img/zenith-blue.jpg", prices: { 100: 40 }, def: 100, notes: "Bergamot, lavender, black pepper, ambroxan",
-      line: "Bergamot over lavender and black pepper, with ambroxan and vetiver." },
-    { id: "fakhar-lattafa", brand: "Lattafa", name: "Fakhar Lattafa", title: "Lattafa Fakhar Lattafa", conc: "Eau de parfum", who: "Him", shape: "floral", juice: "#2B2B30",
-      img: "img/fakhar-lattafa.jpg", prices: { 100: 35 }, def: 100, notes: "Apple, ginger, lavender, tonka bean",
-      line: "Apple and ginger over lavender, tonka bean and cedar." },
-    { id: "9pm-rebel", brand: "Afnan", name: "9pm Rebel", title: "Afnan 9pm Rebel", conc: "Eau de parfum", who: "Him", shape: "woody", juice: "#8E1B2C",
-      img: "img/9pm-rebel.jpg", prices: { 100: 50 }, def: 100, notes: "Bergamot, nutmeg, amber, cedarwood",
-      line: "Bergamot and nutmeg over amber and cedarwood." },
-    { id: "9pm-elixir", brand: "Afnan", name: "9pm Elixir", title: "Afnan 9pm Elixir", conc: "Extrait de parfum", who: "Him", shape: "woody", juice: "#9A4A28",
-      img: "img/9pm-elixir.jpg", prices: { 100: 60 }, def: 100, notes: "Nutmeg, cardamom, leather, vanilla",
-      line: "Nutmeg and cardamom over leather, labdanum and vanilla." },
-    { id: "9pm-night-out", brand: "Afnan", name: "9pm Night Out", title: "Afnan 9pm Night Out", conc: "Extrait de parfum", who: "Him", shape: "woody", juice: "#3A3A3E",
-      img: "img/9pm-night-out.jpg", prices: { 100: 65 }, def: 100, notes: "Bergamot, dragon fruit, toffee, tonka bean",
-      line: "Bergamot and dragon fruit over toffee, tonka bean and ambroxan." },
-    { id: "9pm", brand: "Afnan", name: "9pm", title: "Afnan 9pm", conc: "Eau de parfum", who: "Him", shape: "woody", juice: "#1E1E22",
-      img: "img/9pm.jpg", prices: { 100: 45 }, def: 100, notes: "Apple, cinnamon, lavender, vanilla",
-      line: "Apple and cinnamon over lavender, vanilla and amber." },
-    { id: "9am-dive", brand: "Afnan", name: "9am Dive", title: "Afnan 9am Dive", conc: "Eau de parfum", who: "Him", shape: "woody", juice: "#3D6BB0",
-      img: "img/liquid-brun.jpg", prices: { 100: 45 }, def: 100, notes: "Lemon, mint, pink pepper, incense",
-      line: "Lemon, mint and pink pepper over incense and sandalwood." },
-    { id: "liquid-brun", brand: "French Avenue", name: "Liquid Brun", title: "French Avenue Liquid Brun", conc: "Eau de parfum", who: "Him", shape: "woody", juice: "#9A4B2D",
-      img: "img/9am-dive.jpg", prices: { 100: 45 }, def: 100, notes: "Cinnamon, bergamot, bourbon vanilla, praline",
-      line: "Cinnamon and bergamot over bourbon vanilla and praline." },
-    { id: "optimystic-her", brand: "Fragrance World", name: "Optimystic Her", title: "Fragrance World Optimystic Her", conc: "Eau de parfum", who: "Her", shape: "floral", juice: "#CDB8A8",
-      img: "img/optimystic-her.jpg", prices: { 100: 35 }, def: 100, notes: "Raspberry, strawberry, jasmine, violet, vanilla",
-      line: "Red berries over jasmine and violet on vanilla and musk." },
-    { id: "vanilla-dunes", brand: "Khadlaj", name: "Island Vanilla Dunes", title: "Khadlaj Island Vanilla Dunes", conc: "Extrait de parfum", who: "Him", shape: "warm", juice: "#C0652B",
-      img: "img/vanilla-dunes.jpg", prices: { 100: 55 }, def: 100, notes: "Cinnamon, vanilla, orange blossom, praline, amber",
-      line: "Cinnamon and vanilla over orange blossom, praline and amber." },
-    { id: "imaginari", brand: "Jacques Yves", name: "Imaginari", title: "Jacques Yves Imaginari", conc: "Eau de parfum", who: "Him", shape: "fresh", juice: "#5FB5B0",
-      img: "img/imaginari.jpg", prices: { 100: 40 }, def: 100, notes: "Bergamot, citron, neroli, ginger, black tea",
-      line: "Bright citrus and neroli over ginger, guaiac wood and black tea." },
-    { id: "nautica-voyage", brand: "Nautica", name: "Voyage", title: "Nautica Voyage", conc: "Eau de toilette", who: "Him", shape: "fresh", juice: "#6CB4E4",
-      img: "img/nautica-voyage.jpg", prices: { 100: 30 }, def: 100, notes: "Apple, green leaves, lotus, cedar, musk",
-      line: "Crisp apple and lotus over cedar, musk and amber." },
-    { id: "hawas", brand: "Rasasi", name: "Hawas for Him", title: "Rasasi Hawas for Him", conc: "Eau de parfum", who: "Him", shape: "fresh", juice: "#9AA0D8",
-      img: "img/hawas.jpg", prices: { 100: 45 }, def: 100, notes: "Apple, bergamot, cinnamon, ambergris, musk",
-      line: "Apple and bergamot over cinnamon, ambergris and musk." },
-    { id: "cdn-iconic", brand: "Armaf", name: "Club de Nuit Iconic", title: "Armaf Club de Nuit Iconic", conc: "Eau de parfum", who: "Him", shape: "woody", juice: "#1F3FBF",
-      img: "img/cdn-iconic.jpg", prices: { 105: 50 }, def: 105, notes: "Grapefruit, mint, ginger, incense, sandalwood",
-      line: "Grapefruit and mint over ginger, incense and sandalwood." },
-    { id: "atlantis-extrait", brand: "French Avenue", name: "Atlantis Extrait", title: "French Avenue Atlantis Extrait", conc: "Extrait de parfum", who: "Him", shape: "woody", juice: "#1C3A66",
-      img: "img/atlantis.jpg", prices: { 100: 50 }, def: 100, notes: "Mandarin, watermelon, coconut, ambergris, cacao",
-      line: "Mandarin and watermelon over coconut, ambergris and cacao." },
-    { id: "hawas-kobra", brand: "Rasasi", name: "Hawas Kobra", title: "Rasasi Hawas Kobra", conc: "Eau de parfum", who: "Him", shape: "warm", juice: "#2A2A2E",
-      img: "img/hawas-kobra.jpg", prices: { 100: 50 }, def: 100, notes: "Ginger, bergamot, cinnamon, green tea, amber, musk",
-      line: "Ginger and bergamot over cinnamon, green tea and amber." },
-    { id: "hawas-ice", brand: "Rasasi", name: "Hawas Ice", title: "Rasasi Hawas Ice", conc: "Eau de parfum", who: "Him", shape: "fresh", juice: "#4A5FA8",
-      img: "img/hawas-ice.jpg", prices: { 100: 50 }, def: 100, notes: "Apple, lemon, bergamot, plum, musk, driftwood",
-      line: "Icy apple and citrus over plum, musk and driftwood." },
-    { id: "valentia-rome-intense", brand: "Fragrance World", name: "Valentia Rome Intense", title: "Fragrance World Valentia Rome Intense", conc: "Eau de parfum", who: "Him", shape: "warm", juice: "#B01B2A",
-      img: "img/valentia.jpg", prices: { 100: 35 }, def: 100, notes: "Blackcurrant, jasmine, bourbon vanilla",
-      line: "Blackcurrant and jasmine over bourbon vanilla." },
-    { id: "odyssey-mega", brand: "Armaf", name: "Odyssey Mega Limited Edition", title: "Armaf Odyssey Mega Limited Edition", conc: "Eau de parfum", who: "Him", shape: "fresh", juice: "#E3B91E",
-      img: "img/odyssey-mega.jpg", prices: { 100: 45 }, def: 100, notes: "Orange, bergamot, ginger, juniper, tonka bean, vetiver",
-      line: "Orange and ginger over juniper, tonka bean and vetiver." },
-    { id: "proud-of-you-intense", brand: "Fragrance World", name: "Proud of You Intense", title: "Fragrance World Proud of You Intense", conc: "Eau de parfum", who: "Him", shape: "warm", juice: "#C9541E",
-      img: "img/proud-intense.jpg", prices: { 100: 35 }, def: 100, notes: "Cardamom, bergamot, lavender, cinnamon, vanilla, tonka bean",
-      line: "Cardamom and bergamot over lavender, cinnamon and vanilla." }
-  ];
-  var FLAGS = ["sauvage", "y", "bleu"];
+  var P = window.VIN_CATALOG;
+  try {
+    var catalogResponse = await fetch('https://bold-unit-5143.sengmakhevin.workers.dev/api/catalog', { cache: 'no-store', signal: AbortSignal.timeout(8000) });
+    var catalogData = await catalogResponse.json();
+    if (catalogResponse.ok && catalogData.ok && Array.isArray(catalogData.products) && catalogData.products.length) P = catalogData.products;
+  } catch (e) { /* Keep the bundled catalog available during service outages. */ }
+  var FLAGS = ["sauvage", "y", "bleu"].filter(function(id) { return P.some(function(p) { return p.id === id; }); });
+  if (!FLAGS.length) FLAGS = P.slice(0,3).map(function(p) { return p.id; });
 
   var SHAPES = {
     fresh: { body: "M34 76Q34 74 36 74H84Q86 74 86 76V182Q86 188 80 188H40Q34 188 34 182Z", neck: [52, 60, 16, 14], cap: [46, 22, 28, 38, 3], liq: 98, hl: "M41 98V170", lab: [42, 120, 36, 30, 2] },
@@ -780,13 +619,22 @@ a { color: inherit; }
   P.forEach(function (p) { byId[p.id] = p; });
 
   var $ = function (id) { return document.getElementById(id); };
-  var fmt = function (n) { return "$" + n; };
+  var fmt = function (n) { return "$" + Number(n).toLocaleString('en-US', { maximumFractionDigits: 2 }); };
   var esc = function (s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;"); };
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var sizesOf = function (p) { return Object.keys(p.prices).map(Number).sort(function (a, b) { return a - b; }); };
-  var unit = function (p, size) { return p.prices[size]; };
+  var unit = function (p, size) { return window.VinCatalogRules.price(p, size); };
+  var stockOf = function(p,size) { return window.VinCatalogRules.stock(p,size); };
+  function stockHTML(p,size) {
+    var n = stockOf(p,size);
+    return '<p class="stock-note" style="color:' + (n === 0 ? 'var(--danger)' : 'var(--muted)') + '">' + (n === null ? 'Confirm availability' : n === 0 ? 'Out of stock' : n + ' available') + '</p>';
+  }
+  function priceHTML(p,size) {
+    var discount = window.VinCatalogRules.activeDiscount(p);
+    return (discount ? '<del class="fam">' + fmt(p.prices[size]) + '</del> ' : '') + '<span class="price">' + fmt(unit(p,size)) + '</span>' + (discount ? ' <small class="sale-badge">' + discount + '% OFF</small>' : '');
+  }
 
-  var state = { hero: "sauvage", brand: "All", who: "All", q: "", sel: {} };
+  var state = { hero: FLAGS[0], brand: "All", who: "All", q: "", sel: {} };
   P.forEach(function (p) { state.sel[p.id] = p.def; });
 
   function bottleSVG(p, uid, cls) {
@@ -807,7 +655,7 @@ a { color: inherit; }
   }
 
   function photoHTML(p, cls, lazy) {
-    return '<img class="' + cls + '" src="' + p.img + '" alt="' + esc(p.title) + ' bottle" width="400" height="400"' + (lazy ? ' loading="lazy"' : '') + '>';
+    return '<img class="' + cls + '" src="' + esc(p.img) + '" alt="' + esc(p.title) + ' bottle" width="400" height="400"' + (lazy ? ' loading="lazy"' : '') + '>';
   }
 
   function sizeSeg(p, small) {
@@ -831,7 +679,7 @@ a { color: inherit; }
     $("hero-info").innerHTML =
       '<p class="fam">' + esc(p.brand) + '</p>' +
       '<h2 class="scent-name">' + esc(p.name) + '</h2>' +
-      '<p class="fam">' + p.conc + ', for ' + p.who.toLowerCase() + '</p>' +
+      '<p class="fam">' + esc(p.conc) + ', for ' + esc(p.who.toLowerCase()) + '</p>' +
       '<p class="tagline">' + esc(p.line) + '</p>' +
       '<dl class="pyramid"><div><dt>Key notes</dt><dd>' + esc(p.notes) + '</dd></div></dl>';
   }
@@ -839,8 +687,8 @@ a { color: inherit; }
   function renderHeroBuy() {
     var p = byId[state.hero];
     $("hero-buy").innerHTML = sizeSeg(p, false) +
-      '<span class="price">' + fmt(unit(p, state.sel[p.id])) + '</span>' +
-      '<button class="btn" type="button" data-add="' + p.id + '">Add to cart</button>';
+      '<div>' + priceHTML(p,state.sel[p.id]) + stockHTML(p,state.sel[p.id]) + '</div>' +
+      '<button class="btn" type="button" data-add="' + p.id + '"' + (stockOf(p,state.sel[p.id]) === 0 ? ' disabled' : '') + '>' + (stockOf(p,state.sel[p.id]) === 0 ? 'Out of stock' : 'Add to cart') + '</button>';
   }
 
   function applyScale() {
@@ -886,11 +734,11 @@ a { color: inherit; }
         '<div class="item-body">' +
           '<p class="fam">' + esc(p.brand) + '</p>' +
           '<h3>' + esc(p.name) + '</h3>' +
-          '<p class="fam">' + p.conc + ', for ' + p.who.toLowerCase() + '</p>' +
+          '<p class="fam">' + esc(p.conc) + ', for ' + esc(p.who.toLowerCase()) + '</p>' +
           '<p class="notes">' + esc(p.notes) + '</p>' +
           sizeSeg(p, true) +
-          '<div class="item-buy"><span class="price">' + fmt(unit(p, size)) + '</span>' +
-          '<button class="btn btn-sm" type="button" data-add="' + p.id + '" aria-label="Add ' + esc(p.title) + ', ' + size + ' ml, to cart">Add to cart</button></div>' +
+          stockHTML(p,size) + '<div class="item-buy"><div>' + priceHTML(p,size) + '</div>' +
+          '<button class="btn btn-sm" type="button" data-add="' + p.id + '" aria-label="Add ' + esc(p.title) + ', ' + size + ' ml, to cart"' + (stockOf(p,size) === 0 ? ' disabled' : '') + '>' + (stockOf(p,size) === 0 ? 'Out of stock' : 'Add to cart') + '</button></div>' +
         '</div></li>';
     }).join("");
   }
@@ -1041,6 +889,9 @@ a { color: inherit; }
       ["f-address", "Add your delivery address so we know where to send it."]
     ];
     if (!cart.length) return;
+    if (cart.some(function(i) { var n=stockOf(byId[i.id],i.size); return n !== null && i.qty > n; })) {
+      err.textContent = 'Stock has changed. Reduce the quantity or remove unavailable items before paying.'; return;
+    }
     if (!$("stock-confirmed").checked) {
       err.textContent = "Please confirm stock and delivery with us on Telegram before paying.";
       $("stock-confirmed").focus(); return;
@@ -1311,6 +1162,8 @@ a { color: inherit; }
   function addItem(id) {
     var size = state.sel[id];
     var found = cart.filter(function (i) { return i.id === id && i.size === size; })[0];
+    var available = stockOf(byId[id],size);
+    if (available !== null && (found ? found.qty : 0) >= available) { toast('No more stock available for this size.'); return; }
     if (found) { found.qty = Math.min(99, found.qty + 1); } else { cart.push({ id: id, size: size, qty: 1 }); }
     save();
     renderCart();
@@ -1346,7 +1199,7 @@ a { color: inherit; }
     if (d.psize) { var ps = d.psize.split("|"); setPSize(ps[0], Number(ps[1])); return; }
     if (d.add) { addItem(d.add); return; }
     if (d.inc !== undefined) {
-      var a = cart[Number(d.inc)]; if (a) { a.qty = Math.min(99, a.qty + 1); save(); renderCart('[data-inc="' + d.inc + '"]'); }
+      var a = cart[Number(d.inc)]; if (a) { var n=stockOf(byId[a.id],a.size); if(n !== null && a.qty >= n) { toast('No more stock available for this size.'); return; } a.qty = Math.min(99, a.qty + 1); save(); renderCart('[data-inc="' + d.inc + '"]'); }
       return;
     }
     if (d.dec !== undefined) {
@@ -1422,6 +1275,9 @@ a { color: inherit; }
   })();
 
   /* ---------- Start ---------- */
+  document.querySelector('[data-brand="All"]').parentElement.innerHTML = ['All'].concat(Array.from(new Set(P.map(function(p) { return p.brand; })))).map(function(brand) {
+    return '<button class="chip" type="button" data-brand="' + esc(brand) + '" aria-pressed="' + (brand === 'All') + '">' + esc(brand) + '</button>';
+  }).join('');
   if (SHOP.shipping === 0) {
     $("fact-ship-title").textContent = "Free delivery on every order";
     $("fact-ship-text").textContent = "Delivery costs $0, whatever you order.";

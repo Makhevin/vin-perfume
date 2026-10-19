@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS shop_catalog (
+  id INTEGER PRIMARY KEY CHECK (id = 1),
+  revision INTEGER NOT NULL DEFAULT 1,
+  data TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS admin_login_attempts (
+  key TEXT PRIMARY KEY,
+  attempts INTEGER NOT NULL DEFAULT 0,
+  reset_at INTEGER NOT NULL
+);

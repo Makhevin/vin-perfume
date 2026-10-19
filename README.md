@@ -4,7 +4,9 @@ Static perfume storefront with product filters, bottle sizes, a shopping cart, A
 
 ## Files
 
-- `index.html`: page, styles, product catalog, and browser JavaScript.
+- `index.html`: storefront and checkout JavaScript.
+- `catalog.js`: initial/fallback catalog; online updates come from the catalog API.
+- `admin.html`, `inventory-api.js`: product, stock and promotion manager sources.
 - `img/`: perfume photos and payment QR image.
 
 ## Preview
@@ -13,7 +15,7 @@ Open `index.html` in a browser to review the storefront. Use a local HTTP server
 
 ## Existing order service
 
-The storefront sends orders and receipt images to an existing Cloudflare Worker configured in `SHOP.orderEndpoint`. That service's source code is not included in this project copy. Hosting this storefront does not migrate the order service. Verify the Worker and Telegram configuration before launch. Never put Telegram bot tokens or other secrets in browser code.
+The storefront sends orders and receipt images to a Cloudflare Worker configured in `SHOP.orderEndpoint`. The generated `cloudflare-inventory-worker.js` adds an authenticated admin page and D1 catalog API to that receiver. Follow `SHOP-MANAGER-SETUP.md` to configure the database and deploy. Stock is maintained manually after bank verification. Never put passwords or bot tokens in browser code.
 
 ## Render static site
 
