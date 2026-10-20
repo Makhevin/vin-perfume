@@ -716,7 +716,7 @@ a { color: inherit; }
     $("hero-info").innerHTML =
       '<p class="fam">' + esc(p.brand) + '</p>' +
       '<h2 class="scent-name">' + esc(p.name) + '</h2>' +
-      '<p class="fam">' + esc(p.conc) + ', for ' + esc(p.who.toLowerCase()) + '</p>' +
+      '<p class="fam">' + esc(p.conc) + ', for ' + esc(p.who === 'Unisex' ? 'him & her' : p.who.toLowerCase()) + '</p>' +
       '<p class="tagline">' + esc(p.line) + '</p>' +
       '<dl class="pyramid"><div><dt>Key notes</dt><dd>' + esc(p.notes) + '</dd></div></dl>';
   }
@@ -757,7 +757,7 @@ a { color: inherit; }
   function renderGrid() {
     var list = P.filter(function (p) {
       var hit = !state.q || (p.title + " " + p.notes + " " + p.conc).toLowerCase().indexOf(state.q) !== -1;
-      return hit && (state.brand === "All" || p.brand === state.brand) && (state.who === "All" || p.who === state.who);
+      return hit && (state.brand === "All" || p.brand === state.brand) && (state.who === "All" || p.who === state.who || p.who === 'Unisex');
     });
     $("count").textContent = list.length + (list.length === 1 ? " perfume" : " perfumes");
     if (!list.length) {
@@ -771,7 +771,7 @@ a { color: inherit; }
         '<div class="item-body">' +
           '<p class="fam">' + esc(p.brand) + '</p>' +
           '<h3>' + esc(p.name) + '</h3>' +
-          '<p class="fam">' + esc(p.conc) + ', for ' + esc(p.who.toLowerCase()) + '</p>' +
+          '<p class="fam">' + esc(p.conc) + ', for ' + esc(p.who === 'Unisex' ? 'him & her' : p.who.toLowerCase()) + '</p>' +
           '<p class="notes">' + esc(p.notes) + '</p>' +
           sizeSeg(p, true) +
           stockHTML(p,size) + '<div class="item-buy"><div>' + priceHTML(p,size) + '</div>' +
