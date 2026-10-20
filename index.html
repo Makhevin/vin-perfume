@@ -1043,9 +1043,9 @@ a { color: inherit; }
     var amt = "$" + Number(o.total).toFixed(2);
     var qr = flow.qrUrl || SHOP.qr; // falls back to your static image if the QR library did not load
     var live = !!flow.qrUrl;
-    var aba = flow.khqr ? abaDeepLink(flow.khqr) : SHOP.abaLink;
+    var aba = SHOP.abaLink;
     var btn = '<a class="btn btn-aba btn-block" data-act="aba" href="' + esc(aba) + '">' + ICO.wallet + 'Pay ' + amt + ' via ABA Mobile</a>' +
-      '<p class="qr-cap" style="justify-self:center">Check the amount in ABA before confirming. If Messenger does not open ABA, open this page in Safari or Chrome, or save and scan the QR.</p>';
+      '<p class="qr-cap" style="justify-self:center">Enter ' + amt + ' in ABA before confirming. The amount is copied for you. You can also save and scan the QR.</p>';
     var fig = '<figure class="qr-card"><div class="qr-frame"><button type="button" class="qr-btn" data-act="qr" aria-label="' + (isMobile ? 'Open ABA Mobile to pay ' : 'Copy account details to pay ') + amt + '">' +
       '<img class="qr" src="' + esc(qr) + '" alt="Payment QR code for ' + esc(SHOP.name) + ', ' + amt + '"></button></div>' +
       '<figcaption class="qr-cap">' + (live ? '<span class="qr-chip">' + ICO.shield + 'KHQR for ' + amt + '</span>' : 'Enter ' + amt + ' when you pay.') + '</figcaption></figure>';
@@ -1252,7 +1252,7 @@ a { color: inherit; }
     var act = t.getAttribute("data-act");
     if (act === "back") { flow.step = "cart"; flow.error = ""; flow.fallback = false; renderCart(); return; }
     if (act === "confirm") { confirmOrder(); return; }
-    if (act === "qr") { if (isMobile && flow.khqr) { window.open(abaDeepLink(flow.khqr), "_blank", "noopener"); } else { copyAccount(); } return; }
+    if (act === "qr") { copyAccount(); return; }
     if (act === "aba") { copyText(Number(flow.order.total).toFixed(2), "Amount copied. Paste it in ABA if it is not filled in."); return; }
     if (act === "copy-account") { copyAccount(t); return; }
     if (act === "copy-amount") { copyText(Number(flow.order.total).toFixed(2), "Amount copied", t); return; }
