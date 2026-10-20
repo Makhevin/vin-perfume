@@ -15,7 +15,7 @@ export default {
     const reply = (status, body) => new Response(JSON.stringify(body), { status, headers });
     if (origin && !allowed.has(origin)) return reply(403, { ok: false, error: 'Origin not allowed' });
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers });
-    if (request.method === 'GET') return reply(200, { ok: true, service: 'Vin Perfume order receiver' });
+    if (request.method === 'GET') return reply(200, { ok: true, service: 'VR Scent order receiver' });
     if (request.method !== 'POST') return reply(405, { ok: false, error: 'Method not allowed' });
     if (!env.TELEGRAM_BOT_TOKEN || !env.TELEGRAM_CHAT_ID) return reply(503, { ok: false, error: 'Order service is not configured' });
     if (!request.headers.get('Content-Type')?.includes('multipart/form-data')) return reply(415, { ok: false, error: 'Expected order and receipt form data' });
