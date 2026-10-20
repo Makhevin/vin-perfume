@@ -19,7 +19,7 @@ Prepared locally; Cloudflare database, secrets and deployment still need setup.
 - **Add product:** New product → enter brand, name, image URL, descriptions, size, price and stock → Apply to draft → Publish changes.
 - **Stock:** enter a whole quantity for each size. `0` disables purchases for that size. Blank shows “Confirm availability”. Stock is updated manually after you verify a sale; receipt uploads do not deduct it.
 - **Discount:** enter a percentage (0–90), optionally choose start and end times, then Publish changes. The entered times use the admin computer's local timezone and are stored as UTC. Both customer prices and backend order validation use the promotion dates.
-- **New photo:** use a public HTTPS image URL, or first add the photo to the storefront's `img` folder and deploy it, then enter `img/filename.jpg`. There is no image upload/storage module in this version.
+- **New photo:** click Upload photo and choose an image from your phone or computer. Admin resizes it to a JPEG under 800 KB, stores it in the existing D1 database, and fills the image URL automatically. Click Publish changes to associate it with the live product. The product_photos table is created automatically on the first upload. Existing image URLs continue to work.
 - **Back up:** Download backup saves a JSON catalog copy. D1 is the live catalog source; GitHub's `catalog.js` is only the initial/fallback catalog.
 - **Confirm payments:** check your bank account before shipping. Order receipt uploads are not proof of received payment. Inventory is not automatically reserved, so confirm availability with customers before they pay.
 - **Sessions:** login lasts 8 hours. Signing out clears the browser's cookie. Changing `ADMIN_SESSION_SECRET` invalidates existing sessions.

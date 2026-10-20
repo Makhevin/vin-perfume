@@ -4,7 +4,7 @@ async function main(){
  const rulesContext={};vm.runInNewContext(fs.readFileSync('catalog-rules.js','utf8'),rulesContext);const rules=rulesContext.VinCatalogRules;
  const p={prices:{100:125},stock:{100:3},discountPercent:15};assert.equal(rules.price(p,100),106.25);assert.equal(rules.stock(p,100),3);assert.equal(rules.stock(p,50),null);assert.equal(rules.price({...p,promotionStart:'2030-01-01T00:00:00Z'},100,0),125);assert.equal(rules.price({...p,promotionEnd:'2020-01-01T00:00:00Z'},100,Date.now()),125);
  const db=new DatabaseSync(':memory:');db.exec(fs.readFileSync('inventory-schema.sql','utf8'));
- const DB={prepare(sql){return{bind(...values){return{async run(){return db.prepare(sql).run(...values)},async first(){return db.prepare(sql).get(...values)||null}}},async first(){return db.prepare(sql).get()||null}}}};
+ const DB={prepare(sql){return{bind(...values){values=values.map(v=>v instanceof ArrayBuffer?new Uint8Array(v):v);return{async run(){return db.prepare(sql).run(...values)},async first(){return db.prepare(sql).get(...values)||null}}},async run(){return db.prepare(sql).run()},async first(){return db.prepare(sql).get()||null}}}};
  const env={DB,ADMIN_PASSWORD:'test-password-only-123',ADMIN_SESSION_SECRET:'test-session-secret-only-at-least-32-characters',TELEGRAM_BOT_TOKEN:'test',TELEGRAM_CHAT_ID:'test'};
  const {default:worker}=await import('data:text/javascript;base64,'+Buffer.from(fs.readFileSync('cloudflare-inventory-worker.js','utf8')).toString('base64'));
  const base='https://shop-service.example';
@@ -24,9 +24,19 @@ async function main(){
  edited[0].stock['100']=-1;assert.equal((await req('/api/admin/catalog','PUT',{revision:latest.revision,products:edited},cookie)).status,400);
  const cross=await worker.fetch(new Request(base+'/api/login',{method:'POST',headers:{Origin:'https://untrusted.example','Content-Type':'application/json'},body:JSON.stringify({password:env.ADMIN_PASSWORD})}),env);assert.equal(cross.status,403);
  const tampered=cookie.slice(0,-1)+'x';assert.equal((await req('/api/admin/catalog','GET',undefined,tampered)).status,401);
+ const photoData=fs.readFileSync('img/sauvage.jpg');
+ const photoRequest=(session,origin=base,type='image/jpeg',content=photoData)=>{const form=new FormData();form.set('photo',new Blob([content],{type}),'product.jpg');return new Request(base+'/api/admin/photos',{method:'POST',headers:{Origin:origin,...(session?{Cookie:session}:{})},body:form});};
+ assert.equal((await worker.fetch(photoRequest(),env)).status,401);
+ assert.equal((await worker.fetch(photoRequest(cookie,'https://untrusted.example'),env)).status,403);
+ assert.equal((await worker.fetch(photoRequest(cookie,base,'image/svg+xml','<svg/>'),env)).status,400);
+ assert.equal((await worker.fetch(photoRequest(cookie,base,'image/jpeg','not-an-image'),env)).status,400);
+ const upload=await worker.fetch(photoRequest(cookie),env);assert.equal(upload.status,201);const photo=await upload.json();
+ const served=await worker.fetch(new Request(photo.url),env);assert.equal(served.status,200);assert.equal(served.headers.get('Content-Type'),'image/jpeg');assert.deepEqual(Buffer.from(await served.arrayBuffer()),photoData);
+ const missingPhoto=await worker.fetch(new Request(base+'/images/00000000-0000-0000-0000-000000000000.jpg'),env);assert.equal(missingPhoto.status,404);
  const invalid=new FormData();invalid.set('order',JSON.stringify({items:[{name:saved.products[0].title,size:100,unit:1,qty:1}]}));const order=await worker.fetch(new Request(base+'/',{method:'POST',headers:{Origin:'https://vperfume.sengmakhevin.workers.dev'},body:invalid}),env);assert.equal(order.status,409);
  for(const m of fs.readFileSync('admin.html','utf8').matchAll(/<script>([\s\S]*?)<\/script>/g))new Function(m[1]);
  console.log('Passed: catalog seed, stock and discounts, date boundaries, login, session tampering, CSRF, catalog updates, revision conflicts, invalid stock, and server-side price validation.');
+ console.log('Passed: authenticated image upload, cross-origin rejection, unsafe file rejection, D1 image persistence and public image retrieval.');
  db.close();
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});
