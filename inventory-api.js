@@ -34,7 +34,7 @@ function validateCatalog(products) {
     if (titles.has(p.title)) throw Error('Each product needs a distinct full name.');
     titles.add(p.title);
     for (const field of ['brand','name','title','notes','conc','line']) if (typeof p[field] !== 'string' || p[field].length > 1000) throw Error('Invalid product text.');
-    if (!p.brand.trim() || !p.name.trim()) throw Error('Brand and name are required.');
+    if (!p.brand.trim() || !p.name.trim()) throw Error('Product "' + (p.name || p.id) + '" (' + p.id + '): brand and product name are required.');
     if (!['Him','Her','Unisex'].includes(p.who) || !['fresh','floral','woody','warm'].includes(p.shape) || !/^#[0-9a-f]{6}$/i.test(p.juice)) throw Error('Invalid product appearance.');
     if (typeof p.img !== 'string' || !(/^(img\/[a-z0-9_.-]+|https:\/\/[^\s<>"']+)$/i.test(p.img))) throw Error('Use an img/ filename or HTTPS image URL.');
     const sizes = Object.keys(p.prices || {});
