@@ -548,6 +548,7 @@ a { color: inherit; }
               <button class="chip" type="button" data-who="All" aria-pressed="true">All</button>
               <button class="chip" type="button" data-who="Him" aria-pressed="false">Him</button>
               <button class="chip" type="button" data-who="Her" aria-pressed="false">Her</button>
+              <button class="chip" type="button" data-who="Unisex" aria-pressed="false">Him and Her</button>
             </div>
           </div>
         </div>
@@ -716,7 +717,7 @@ a { color: inherit; }
     $("hero-info").innerHTML =
       '<p class="fam">' + esc(p.brand) + '</p>' +
       '<h2 class="scent-name">' + esc(p.name) + '</h2>' +
-      '<p class="fam">' + esc(p.conc) + ', for ' + esc(p.who === 'Unisex' ? 'him & her' : p.who.toLowerCase()) + '</p>' +
+      '<p class="fam">' + esc(p.conc) + ', for ' + esc(p.who === 'Unisex' ? 'him and her' : p.who.toLowerCase()) + '</p>' +
       '<p class="tagline">' + esc(p.line) + '</p>' +
       '<dl class="pyramid"><div><dt>Key notes</dt><dd>' + esc(p.notes) + '</dd></div></dl>';
   }
@@ -771,7 +772,7 @@ a { color: inherit; }
         '<div class="item-body">' +
           '<p class="fam">' + esc(p.brand) + '</p>' +
           '<h3>' + esc(p.name) + '</h3>' +
-          '<p class="fam">' + esc(p.conc) + ', for ' + esc(p.who === 'Unisex' ? 'him & her' : p.who.toLowerCase()) + '</p>' +
+          '<p class="fam">' + esc(p.conc) + ', for ' + esc(p.who === 'Unisex' ? 'him and her' : p.who.toLowerCase()) + '</p>' +
           '<p class="notes">' + esc(p.notes) + '</p>' +
           sizeSeg(p, true) +
           stockHTML(p,size) + '<div class="item-buy"><div>' + priceHTML(p,size) + '</div>' +
