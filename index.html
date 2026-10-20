@@ -1043,9 +1043,9 @@ a { color: inherit; }
     var amt = "$" + Number(o.total).toFixed(2);
     var qr = flow.qrUrl || SHOP.qr; // falls back to your static image if the QR library did not load
     var live = !!flow.qrUrl;
-    var aba = SHOP.abaLink; // ABA payment link; the amount is copied on click
-    var btn = '<a class="btn btn-aba btn-block" data-act="aba" href="' + esc(aba) + '" target="_blank" rel="noopener">' + ICO.wallet + 'Pay ' + amt + ' via ABA Mobile</a>' +
-      '<p class="qr-cap" style="justify-self:center">Opens ABA Mobile and copies ' + amt + '. If ABA does not fill in the amount, paste it, or scan the QR below.</p>';
+    var aba = flow.khqr ? abaDeepLink(flow.khqr) : SHOP.abaLink;
+    var btn = '<a class="btn btn-aba btn-block" data-act="aba" href="' + esc(aba) + '">' + ICO.wallet + 'Pay ' + amt + ' via ABA Mobile</a>' +
+      '<p class="qr-cap" style="justify-self:center">Check the amount in ABA before confirming. If Messenger does not open ABA, open this page in Safari or Chrome, or save and scan the QR.</p>';
     var fig = '<figure class="qr-card"><div class="qr-frame"><button type="button" class="qr-btn" data-act="qr" aria-label="' + (isMobile ? 'Open ABA Mobile to pay ' : 'Copy account details to pay ') + amt + '">' +
       '<img class="qr" src="' + esc(qr) + '" alt="Payment QR code for ' + esc(SHOP.name) + ', ' + amt + '"></button></div>' +
       '<figcaption class="qr-cap">' + (live ? '<span class="qr-chip">' + ICO.shield + 'KHQR for ' + amt + '</span>' : 'Enter ' + amt + ' when you pay.') + '</figcaption></figure>';
