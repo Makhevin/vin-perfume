@@ -455,7 +455,18 @@ a { color: inherit; }
  </div>
 </dialog>
 <style>
-.floating-cart { display: none; position: fixed; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); left: 16px; right: 16px; z-index: 30; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 20px; border: 1px solid var(--line); border-radius: 18px; background: var(--accent); color: var(--accent-ink); box-shadow: 0 8px 30px #0003; cursor: pointer; font: 600 15px var(--display); min-height: 56px; }
+.floating-cart { display: none; position: fixed; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); left: 14px; right: 14px; z-index: 30; align-items: center; gap: 14px; padding: 12px 16px; border: 1px solid #c5ac754d; border-radius: 22px; background: linear-gradient(120deg,#183f36,#102c29); color: #fff9ed; box-shadow: 0 12px 32px #061e2940, inset 0 1px 0 #ffffff14; cursor: pointer; font: 600 15px var(--display); min-height: 76px; text-align: left; transition: transform .18s ease, box-shadow .18s ease; }
+.floating-cart:active { transform: scale(.98); }
+.floating-cart:focus-visible { outline: 3px solid #d8bd83; outline-offset: 4px; }
+.floating-cart-icon { position: relative; display: grid; place-items: center; flex: 0 0 46px; width: 46px; height: 46px; background: #ffffff0d; border: 1px solid #d8bd8340; border-radius: 15px; color: #e6c88c; }
+.floating-cart-icon svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+#floating-cart-count { position: absolute; top: -7px; right: -6px; min-width: 21px; height: 21px; padding: 0 4px; display: grid; place-items: center; border-radius: 20px; background: #e6c88c; color: #16382f; border: 2px solid #183f36; font-size: 10px; font-weight: 800; }
+.floating-cart-copy { display: grid; gap: 3px; flex: 1; }
+.floating-cart-copy small { color: #c0cec3; font-size: 10px; font-weight: 400; }
+.floating-cart-price { display: grid; gap: 2px; text-align: right; }
+.floating-cart-price small { color: #c0cec3; font-size: 9px; font-weight: 400; }
+#floating-cart-total { font-size: 19px; font-variant-numeric: tabular-nums; }
+.floating-cart-arrow { color: #e6c88c; font-size: 21px; font-weight: 400; }
 .floating-cart[hidden] { display: none; }
 </style>
 <div id="page">
@@ -473,7 +484,7 @@ a { color: inherit; }
       </button>
     </div>
   </header>
-  <button class="floating-cart" id="floating-cart" type="button" data-open-cart hidden><span>View cart <span id="floating-cart-count">0</span></span><span id="floating-cart-total"></span></button>
+  <button class="floating-cart" id="floating-cart" type="button" data-open-cart hidden><span class="floating-cart-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m8 9 4-6 4 6M3 9h18l-2 11H5L3 9Z"/><path d="M9 13v3m6-3v3"/></svg><span id="floating-cart-count">0</span></span><span class="floating-cart-copy"><span>View your cart</span><small>Your scent is waiting</small></span><span class="floating-cart-price"><span id="floating-cart-total"></span><small>Delivery included</small></span><span class="floating-cart-arrow" aria-hidden="true">→</span></button>
 
   <main id="top">
     <section class="wrap hero" aria-labelledby="hero-title">
@@ -1139,7 +1150,7 @@ a { color: inherit; }
     var count = cart.reduce(function (s, i) { return s + i.qty; }, 0);
     $("cart-count").textContent = count;
     $("floating-cart").hidden = count === 0;
-    $("floating-cart-count").textContent = '(' + count + ')';
+    $("floating-cart-count").textContent = count;
     $("floating-cart-total").textContent = fmt(totals().total);
     $("floating-cart").setAttribute('aria-label', 'View cart, ' + count + ' items, ' + fmt(totals().total) + ' including delivery');
     $("cart-btn").setAttribute("aria-label", "Open cart, " + count + (count === 1 ? " item" : " items"));
