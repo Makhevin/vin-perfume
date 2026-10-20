@@ -51,7 +51,7 @@ function validateCatalog(products) {
 }
 async function inventoryRoute(request,env) {
   const url = new URL(request.url);
-  if (url.pathname === '/admin' || url.pathname === '/admin/') return new Response(ADMIN_HTML, { headers: { 'Content-Type':'text/html; charset=utf-8', 'Cache-Control':'no-store', 'X-Frame-Options':'DENY', 'Content-Security-Policy':"default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; img-src https: data:; base-uri 'none'; frame-ancestors 'none'; form-action 'self'", 'Referrer-Policy':'no-referrer' } });
+  if (url.pathname === '/admin' || url.pathname === '/admin/') return new Response(ADMIN_HTML, { headers: { 'Content-Type':'text/html; charset=utf-8', 'Cache-Control':'no-store', 'X-Frame-Options':'DENY', 'Content-Security-Policy':"default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; img-src https: data: blob:; base-uri 'none'; frame-ancestors 'none'; form-action 'self'", 'Referrer-Policy':'no-referrer' } });
   if (!url.pathname.startsWith('/api/')) return null;
   if (!env.DB) return json(503,{ok:false,error:'Connect the DB database binding first.'});
   try {
